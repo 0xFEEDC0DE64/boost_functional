@@ -3,6 +3,8 @@
 # Distributed under the Boost Software License, Version 1.0.
 # https://www.boost.org/LICENSE_1_0.txt
 
+if(NOT DEFINED IDF_TARGET)
+
 cmake_minimum_required(VERSION 3.5...3.16)
 
 project(boost_functional VERSION "${BOOST_SUPERPROJECT_VERSION}" LANGUAGES CXX)
@@ -28,6 +30,29 @@ target_link_libraries(boost_functional
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
 
   add_subdirectory(test)
+
+endif()
+
+else()
+
+FILE(GLOB_RECURSE headers include/*.h include/*.hpp)
+
+idf_component_register(
+    SRCS
+        ${headers}
+    INCLUDE_DIRS
+        include
+    REQUIRES
+        boost_config
+        boost_core
+        boost_function
+        boost_function_types
+        boost_mpl
+        boost_preprocessor
+        boost_type_traits
+        boost_typeof
+        boost_utility
+)
 
 endif()
 
